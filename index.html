@@ -3,9 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="deco.css">
     <title>Task Tracker</title>
 </head>
 <body>
-    <h1>oleee oleoleole</h1>
+    <header>
+        <div class="header-left">
+          <h1>Header</h1>
+        </div>
+        <div class="header-right">
+          <button class="btn">Log In</button>
+          <button class="btn">Sign Up</button>
+        </div>
+      </header>
+      
+      <main>
+        <div class="container">
+          <div class="task-buttons">
+            <button class="btn">To-Do Tasks</button>
+            <button class="btn">Completed Tasks</button>
+          </div>
+          <div class="task-list">
+            <!-- Your tasks will be dynamically added here -->
+          </div>
+          <div>
+            <button class="btn add-task-btn">Add New Task</button>
+            <input type="text" id="task-input" class="hidden" placeholder="Enter a task">
+          </div>
+      </main>
+    
+      <script src="script.js"></script>
 </body>
 </html>
