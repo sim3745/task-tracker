@@ -4,6 +4,7 @@ const todoTasksBtn = document.querySelector('.task-buttons button:nth-child(1)')
 const completedTasksBtn = document.querySelector('.task-buttons button:nth-child(2)');
 const taskInput = document.getElementById('task-input');
 const addTaskBtn = document.querySelector('.add-task-btn');
+const clearTasksBtn = document.querySelector('.clear-tasks');
 
 // Function to show only the "To-Do Tasks"
 function showTodoTasks() {
@@ -128,6 +129,12 @@ function removeTaskFromStorage(taskElement) {
   localStorage.setItem('tasks', JSON.stringify(tasks));
 }
 
+// Function to clear all tasks
+function clearTasks() {
+  taskList.innerHTML = '';
+  localStorage.removeItem('tasks');
+}
+
 // Add event listener to the "To-Do Tasks" button
 todoTasksBtn.addEventListener('click', () => {
   showTodoTasks();
@@ -164,6 +171,11 @@ addTaskBtn.addEventListener('click', () => {
   }
 });
 
+// Add event listener to the "Clear Tasks" button
+clearTasksBtn.addEventListener('click', () => {
+  clearTasks();
+});
+
 // Load tasks from local storage on page load
 window.addEventListener('load', () => {
   const tasks = JSON.parse(localStorage.getItem('tasks'));
@@ -172,6 +184,9 @@ window.addEventListener('load', () => {
       const taskElement = createTaskElement(task);
       taskList.appendChild(taskElement);
     });
+
+    // Show only the To-Do tasks on page load
+    showTodoTasks();
   }
 });
 
