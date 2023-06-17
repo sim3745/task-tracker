@@ -3,6 +3,7 @@ const taskList = document.querySelector('.task-list');
 const todoTasksBtn = document.querySelector('.task-buttons button:nth-child(1)');
 const completedTasksBtn = document.querySelector('.task-buttons button:nth-child(2)');
 const taskInput = document.getElementById('task-input');
+const addTaskBtn = document.querySelector('.add-task-btn');
 
 // Function to show only the "To-Do Tasks"
 function showTodoTasks() {
@@ -39,15 +40,20 @@ function addTask() {
   // Get the task description from the input field
   const taskDescription = taskInput.value;
 
+  // Check if the input field is empty
+  if (taskDescription.trim() === '') {
+    return; // Exit the function if the input field is empty
+  }
+
   // Create a new task element
   const taskElement = document.createElement('div');
   taskElement.classList.add('task');
   taskElement.innerHTML = `
     <div class="task-content">
-      <span class="checkmark">&#10003;</span>
-      <p>${taskDescription}</p>
+      <button class="toggle-completion"><span class="checkmark">&#10003;</span></button>
+      <p class="task-description">${taskDescription}</p>
       <span class="timestamp">${new Date().toLocaleString()}</span>
-      <span class="remove-task">X</span>
+      <button class="remove-task"><span class="remove-task">X</span></button>
     </div>
   `;
 
@@ -122,9 +128,6 @@ function removeTaskFromStorage(taskElement) {
   localStorage.setItem('tasks', JSON.stringify(tasks));
 }
 
-
-
-
 // Add event listener to the "To-Do Tasks" button
 todoTasksBtn.addEventListener('click', () => {
   showTodoTasks();
@@ -138,6 +141,25 @@ completedTasksBtn.addEventListener('click', () => {
 // Add event listener to the input field to add a task on "Enter" key press
 taskInput.addEventListener('keydown', (event) => {
   if (event.key === 'Enter') {
+    event.preventDefault(); // Prevent the default "Enter" key behavior
+
+    // Get the task description from the input field
+    const taskDescription = taskInput.value;
+
+    // Check if the input field is empty
+    if (taskDescription.trim() !== '') {
+      addTask();
+    }
+  }
+});
+
+// Add event listener to the "Add New Task" button
+addTaskBtn.addEventListener('click', () => {
+  // Get the task description from the input field
+  const taskDescription = taskInput.value;
+
+  // Check if the input field is empty
+  if (taskDescription.trim() !== '') {
     addTask();
   }
 });
@@ -160,10 +182,10 @@ function createTaskElement(task) {
   taskElement.classList.toggle('completed', task.completed);
   taskElement.innerHTML = `
     <div class="task-content">
-      <span class="checkmark">&#10003;</span>
-      <p>${task.description}</p>
+      <button class="toggle-completion"><span class="checkmark">&#10003;</span></button>
+      <p class="task-description">${task.description}</p>
       <span class="timestamp">${task.timestamp}</span>
-      <span class="remove-task">X</span>
+      <button class="remove-task"><span class="remove-task">X</span></button>
     </div>
   `;
 
@@ -172,7 +194,7 @@ function createTaskElement(task) {
 
 // Add event listener to the task list for toggling task completion
 taskList.addEventListener('click', (event) => {
-  if (event.target.classList.contains('checkmark')) {
+  if (event.target.classList.contains('toggle-completion') || event.target.classList.contains('checkmark')) {
     toggleTaskCompletion(event);
   }
 });
