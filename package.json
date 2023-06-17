@@ -1,0 +1,20 @@
+{
+  "dependencies": {
+    "@babel/cli": "^7.22.5",
+    "@babel/core": "^7.22.5",
+    "@babel/preset-env": "^7.22.5",
+    "babel-loader": "^9.1.2",
+    "firebase": "^9.22.2",
+    "webpack": "^5.87.0",
+    "webpack-cli": "^5.1.4"
+  },
+  "name": "task-tracker",
+  "version": "1.0.0",
+  "description": "Track your tasks effectively and quickly. On any device, anytime.",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Simon Gomola",
+  "license": "ISC"
+}

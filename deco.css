@@ -34,6 +34,7 @@ header {
   
 .task-list {
     max-height: 500px; /* Adjust the height as needed */
+    height: 500px;
     overflow-y: auto;
     padding: 5px;
     border: 3px solid rgb(102, 49, 0);
