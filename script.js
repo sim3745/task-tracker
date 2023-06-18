@@ -91,13 +91,18 @@ function toggleTaskCompletion(event) {
   const taskElement = event.target.closest('.task');
   if (taskElement) {
     taskElement.classList.toggle('completed');
-    const checkmark = taskElement.querySelector('.checkmark');
+
+    const checkmarkButton = taskElement.querySelector('.toggle-completion');
+    if (checkmarkButton) {
+      checkmarkButton.remove();
+    }
 
     // Update task completion status in local storage
     updateTaskCompletion(taskElement);
     showTodoTasks();
   }
 }
+
 
 // Function to update task completion status in local storage
 function updateTaskCompletion(taskElement) {
@@ -195,14 +200,33 @@ function createTaskElement(task) {
   const taskElement = document.createElement('div');
   taskElement.classList.add('task');
   taskElement.classList.toggle('completed', task.completed);
-  taskElement.innerHTML = `
-    <div class="task-content">
-      <button class="toggle-completion"><span class="checkmark">&#10003;</span></button>
-      <p class="task-description">${task.description}</p>
-      <span class="timestamp">${task.timestamp}</span>
-      <button class="remove-task"><span class="remove-task">X</span></button>
-    </div>
-  `;
+
+  const taskContent = document.createElement('div');
+  taskContent.classList.add('task-content');
+
+  if (!task.completed) {
+    const toggleButton = document.createElement('button');
+    toggleButton.classList.add('toggle-completion');
+    toggleButton.innerHTML = '<span class="checkmark">&#10003;</span>';
+    taskContent.appendChild(toggleButton);
+  }
+
+  const taskDescription = document.createElement('p');
+  taskDescription.classList.add('task-description');
+  taskDescription.textContent = task.description;
+  taskContent.appendChild(taskDescription);
+
+  const timestamp = document.createElement('span');
+  timestamp.classList.add('timestamp');
+  timestamp.textContent = task.timestamp;
+  taskContent.appendChild(timestamp);
+
+  const removeButton = document.createElement('button');
+  removeButton.classList.add('remove-task');
+  removeButton.innerHTML = '<span class="remove-task">X</span>';
+  taskContent.appendChild(removeButton);
+
+  taskElement.appendChild(taskContent);
 
   return taskElement;
 }
