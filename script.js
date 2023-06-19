@@ -53,6 +53,7 @@ function addTask() {
     <div class="task-content">
       <button class="toggle-completion task-btn checkmark">&#10003;</button>
       <p class="task-description">${taskDescription}</p>
+      <span class="edit-task"><img src="./imgs/edit-icon.png" alt="Edit"></span>
       <span class="timestamp"><p>${new Date().toLocaleString()}</p></span>
       <button class="remove-task task-btn">X</button>
     </div>
