@@ -51,10 +51,10 @@ function addTask() {
   taskElement.classList.add('task');
   taskElement.innerHTML = `
     <div class="task-content">
-      <button class="toggle-completion"><span class="checkmark">&#10003;</span></button>
+      <button class="toggle-completion task-btn checkmark">&#10003;</button>
       <p class="task-description">${taskDescription}</p>
-      <span class="timestamp">${new Date().toLocaleString()}</span>
-      <button class="remove-task"><span class="remove-task">X</span></button>
+      <span class="timestamp"><p>${new Date().toLocaleString()}</p></span>
+      <button class="remove-task task-btn">X</button>
     </div>
   `;
 
@@ -205,9 +205,9 @@ function createTaskElement(task) {
   taskContent.classList.add('task-content');
 
   if (!task.completed) {
-    const toggleButton = document.createElement('button');
+    const toggleButton = document.createElement('span');
     toggleButton.classList.add('toggle-completion');
-    toggleButton.innerHTML = '<span class="checkmark">&#10003;</span>';
+    toggleButton.innerHTML = '<button class="toggle-completion task-btn checkmark">&#10003;</button>';
     taskContent.appendChild(toggleButton);
   }
 
@@ -216,20 +216,83 @@ function createTaskElement(task) {
   taskDescription.textContent = task.description;
   taskContent.appendChild(taskDescription);
 
+  const editButton = document.createElement('span');
+  editButton.classList.add('edit-task');
+  editButton.innerHTML = '<img src="./imgs/edit-icon.png" alt="Edit">';
+  taskContent.appendChild(editButton);
+
   const timestamp = document.createElement('span');
   timestamp.classList.add('timestamp');
   timestamp.textContent = task.timestamp;
   taskContent.appendChild(timestamp);
 
-  const removeButton = document.createElement('button');
+  const removeButton = document.createElement('span');
   removeButton.classList.add('remove-task');
-  removeButton.innerHTML = '<span class="remove-task">X</span>';
+  removeButton.innerHTML = '<button class="remove-task task-btn">X</button>';
   taskContent.appendChild(removeButton);
 
   taskElement.appendChild(taskContent);
 
+  // Add event listener to the edit button
+  editButton.addEventListener('click', () => {
+    editTask(taskElement, task);
+  });
+
   return taskElement;
 }
+
+// Function to handle task editing
+function editTask(taskElement, task) {
+  const taskDescription = taskElement.querySelector('.task-description');
+  const previousDescription = taskDescription.textContent;
+
+  // Create an input field with the previous task description
+  const inputField = document.createElement('input');
+  inputField.type = 'text';
+  inputField.value = previousDescription;
+
+  // Replace the task description with the input field
+  taskDescription.replaceWith(inputField);
+
+  // Focus on the input field
+  inputField.focus();
+
+  // Event listener for handling the input field on blur (lose focus)
+  inputField.addEventListener('blur', () => {
+    const newDescription = inputField.value;
+
+    // Update the task description if it has changed
+    if (newDescription !== previousDescription) {
+      taskDescription.textContent = newDescription;
+      task.description = newDescription;
+
+      // Update task description in local storage
+      updateTaskDescription(taskElement, task);
+    }
+
+    // Replace the input field with the task description
+    inputField.replaceWith(taskDescription);
+  });
+
+  // Event listener for handling the input field on Enter key press
+  inputField.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault(); // Prevent the default Enter key behavior
+      inputField.blur(); // Trigger the blur event to update the task description
+    }
+  });
+}
+
+// Function to update task description in local storage
+function updateTaskDescription(taskElement, task) {
+  const tasks = JSON.parse(localStorage.getItem('tasks'));
+  const index = Array.from(taskList.children).indexOf(taskElement);
+  tasks[index].description = task.description;
+  localStorage.setItem('tasks', JSON.stringify(tasks));
+}
+
+
+
 
 // Add event listener to the task list for toggling task completion
 taskList.addEventListener('click', (event) => {
